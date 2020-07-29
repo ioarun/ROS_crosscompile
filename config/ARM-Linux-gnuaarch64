@@ -1,7 +1,7 @@
 #
 # Yocto
 #
-# Make settings for Linux/GCC ARM
+# Make settings for Linux/GCC arm64/aarch64
 #
 #
 
@@ -9,9 +9,9 @@
 # General Settings
 #
 LINKMODE           ?= SHARED
-TOOL               ?= arm-linux-gnueabihf
+TOOL               ?= aarch64-linux-gnu
 POCO_TARGET_OSNAME  = Linux
-POCO_TARGET_OSARCH ?= armv7l
+POCO_TARGET_OSARCH ?= aarch64
 
 #
 # Define Tools
@@ -71,4 +71,3 @@ SYSFLAGS = -D_XOPEN_SOURCE=600 -D_REENTRANT -D_THREAD_SAFE -D_FILE_OFFSET_BITS=6
 # System Specific Libraries
 #
 SYSLIBS  = -lpthread -ldl -lrt
-

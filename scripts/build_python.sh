@@ -1,23 +1,40 @@
-#!/bin/bash
+#!/bin/bash -e
+
+echo "-------------------------------------------------------------------------"
+echo "Installing python 2.7.3"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
-mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
+PKG_DIR="Python-2.7.3"
+PKG_TAR="Python-2.7.3.tar.xz"
+DOWNLOAD_LINK="http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.xz"
+# https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tar.xz # 2.7.17 is the one that comes with Ubuntu18
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
 cd build
-wget http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.xz
-tar xvf Python-2.7.3.tar.xz
-rm Python-2.7.3.tar.xz
-cd Python-2.7.3
-wget https://gist.githubusercontent.com/bmount/6929380/raw/8ef8e2701e7d5b1b22c5687e93d22f6ef9ca7ec6/Python-2.7.3-xcompile.patch
+if [ ! -d $PKG_DIR ]; then
+  if [ ! -f $PKG_TAR ]; then
+    wget $DOWNLOAD_LINK
+  fi
+  tar xvf $PKG_TAR
+fi
+cd $PKG_DIR
+
+if [ ! -f "Python-2.7.3-xcompile.patch" ]; then
+  wget https://gist.githubusercontent.com/bmount/6929380/raw/8ef8e2701e7d5b1b22c5687e93d22f6ef9ca7ec6/Python-2.7.3-xcompile.patch
+fi
 ./configure
+
 make python Parser/pgen
 mv python hostpython
 mv Parser/pgen Parser/hostpgen
 make distclean
+
 patch -p1 < Python-2.7.3-xcompile.patch
-CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ AR=arm-linux-gnueabihf-ar RANLIB=arm-linux-gnueabihf-ranlib CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --host=arm-linux --build=x86_64-linux-gnu --prefix=${DIR}/arm-linux --enable-shared
-make HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="arm-linux-gnueabihf-gcc -shared" CROSS_COMPILE=arm-linux-gnueabihf- CROSS_COMPILE_TARGET=yes HOSTARCH=arm-linux BUILDARCH=x86_64-linux-gnu
-make install HOSTPYTHON=./hostpython BLDSHARED="arm-linux-gnueabihf-gcc -shared" CROSS_COMPILE=arm-linux-gnueabihf- CROSS_COMPILE_TARGET=yes prefix=${DIR}/arm-linux
+
+CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=${INSTALL_PREFIX} --enable-shared
+make -j$(nproc) HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="aarch64-linux-gnu-gcc -shared" CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_TARGET=yes HOSTARCH=aarch64-linux-gnu BUILDARCH=x86_64-linux-gnu
+make install HOSTPYTHON=./hostpython BLDSHARED="aarch64-linux-gnu-gcc -shared" CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_TARGET=yes prefix=${INSTALL_PREFIX}
 cd ${DIR}

@@ -1,30 +1,40 @@
-#! /bin/bash
-echo "Installing boost 1.55"
+#! /bin/bash -e
+
+echo "-------------------------------------------------------------------------"
+echo "Installing boost 1.65.1"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
-export C_INCLUDE_PATH=${DIR}/arm-linux/include/python2.7
-export CPLUS_INCLUDE_PATH=${DIR}/arm-linux/include/python2.7
-mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
+PKG_DIR="boost_1_65_1"
+PKG_TAR="boost_1_65_1.tar.gz"
+DOWNLOAD_LINK="https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
 cd build
-wget -O boost_1_55_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz/download
-tar xzvf boost_1_55_0.tar.gz
-rm boost_1_55_0.tar.gz
-cd boost_1_55_0
+if [ ! -d $PKG_DIR ]; then
+  if [ ! -f $PKG_TAR ]; then
+    wget $DOWNLOAD_LINK
+  fi
+  tar xzf $PKG_TAR
+fi
+cd $PKG_DIR
+
+export C_INCLUDE_PATH=${INSTALL_PREFIX}/include/python2.7
+export CPLUS_INCLUDE_PATH=${INSTALL_PREFIX}/include/python2.7
+
 ./bootstrap.sh
 echo "using gcc
-    : arm
-    : arm-linux-gnueabihf-g++
+    : aarch64
+    : aarch64-linux-gnu-g++
     : <cxxflags>-std=gnu++0x
-    ; " >> tools/build/v2/user-config.jam
+    ; " > tools/build/src/user-config.jam
 echo "using python
     : 2.7
-    : ${DIR}/arm-linux/bin/python 
-    : ${DIR}/arm-linux/include/python2.7
-    : ${DIR}/arm-linux/lib
-    ; " >> tools/build/v2/user-config.jam
-./b2 install toolset=gcc-arm --prefix=${DIR}/arm-linux
-#./b2 install toolset=gcc-arm --with-python --prefix=${DIR}/arm-linux
+    : ${INSTALL_PREFIX}/bin/python
+    : ${INSTALL_PREFIX}/include/python2.7
+    : ${INSTALL_PREFIX}/lib
+    ; " >> tools/build/src/user-config.jam
+./b2 -j$(nproc) install toolset=gcc-aarch64 --prefix=${INSTALL_PREFIX}
 cd ${DIR}

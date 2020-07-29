@@ -1,16 +1,28 @@
 #! /bin/bash
+
+echo "-------------------------------------------------------------------------"
+echo "Installing libjpeg-turbo8 1.5.2"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
-mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
+PKG_DIR="libjpeg-turbo-1.5.2"
+PKG_TAR="libjpeg-turbo-1.5.2.tar.gz"
+DOWNLOAD_LINK="https://nchc.dl.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
 cd build
-wget http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.3.0.tar.gz
-tar xzvf libjpeg-turbo-1.3.0.tar.gz
-rm libjpeg-turbo-1.3.0.tar.gz
-cd libjpeg-turbo-1.3.0
- ./configure --host=arm-linux-gnueabihf CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar STRIP=arm-linux-gnueabihf-strip RANLIB=arm-linux-gnueabihf-ranlib --prefix=${DIR}/arm-linux CFLAGS=-fPIC CXXFLAGS=-fPIC
+if [ ! -d $PKG_DIR ]; then
+  if [ ! -f $PKG_TAR ]; then
+    wget $DOWNLOAD_LINK
+  fi
+  tar xzf $PKG_TAR
+fi
+cd $PKG_DIR
+
+./configure --host=aarch64-linux-gnu CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar STRIP=aarch64-linux-gnu-strip RANLIB=aarch64-linux-gnu-ranlib --prefix=${INSTALL_PREFIX} CFLAGS=-fPIC CXXFLAGS=-fPIC
 make
 make install
+
 cd ${DIR}

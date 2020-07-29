@@ -1,17 +1,27 @@
 #! /bin/bash
+
+echo "-------------------------------------------------------------------------"
+echo "Installing console_bridge"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
+
+PKG_DIR="console_bridge"
+PKG_GIT="https://github.com/ros/console_bridge.git"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
+cd build
+if [ ! -d $PKG_DIR ]; then
+  git clone	$PKG_GIT
+fi
+cd $PKG_DIR
+# git checkout 8c3c62501bf8521dcf53705b497ea982b874c25d
+
 mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
 cd build
-git clone https://github.com/ros/console_bridge.git
-cd console_bridge
-git checkout 8c3c62501bf8521dcf53705b497ea982b874c25d
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=${DIR}/arm-linux -DCMAKE_TOOLCHAIN_FILE=${DIR}/arm-toolchain.cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_TOOLCHAIN_FILE=${DIR}/arm-toolchain.cmake ..
 make
 make install
 cd ${DIR}

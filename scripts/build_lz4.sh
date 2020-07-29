@@ -1,14 +1,24 @@
 #! /bin/bash
+
+echo "-------------------------------------------------------------------------"
+echo "Installing lz4"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
-mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
+PKG_DIR="lz4"
+PKG_GIT="https://github.com/lz4/lz4"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
 cd build
-git clone https://github.com/lz4/lz4
-cd lz4
-make CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CFLAGS=-fPIC
-cp lib/lib* ${DIR}/arm-linux/lib/
-cp lib/*.h ${DIR}/arm-linux/include/
+if [ ! -d $PKG_DIR ]; then
+  git clone	$PKG_GIT
+fi
+cd $PKG_DIR
+
+make CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar CFLAGS=-fPIC
+cp lib/lib* ${INSTALL_PREFIX}/lib/
+cp lib/*.h ${INSTALL_PREFIX}/include/
+
 cd ${DIR}

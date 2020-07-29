@@ -1,12 +1,21 @@
 #! /bin/bash
+
+echo "-------------------------------------------------------------------------"
+echo "Installing bzip2 1.0.6"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
-mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
+PKG_DIR="bzip2-1.0.6"
+PKG_GIT="https://github.com/enthought/bzip2-1.0.6.git"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
 cd build
-git clone	https://github.com/enthought/bzip2-1.0.6.git
-cd bzip2-1.0.6
-make install CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CFLAGS=-fPIC PREFIX=${DIR}/arm-linux
+if [ ! -d $PKG_DIR ]; then
+  git clone	$PKG_GIT
+fi
+cd $PKG_DIR
+
+make install CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar CFLAGS=-fPIC PREFIX=${INSTALL_PREFIX}
 cd ${DIR}

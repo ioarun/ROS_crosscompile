@@ -1,24 +1,30 @@
-#!/bin/bash
+#!/bin/bash -e
+
+echo "-------------------------------------------------------------------------"
+echo "Installing opencv 3.2"
 DIR=`pwd`
-echo "The present working directory is `pwd`"
+PKG_DIR="opencv-3.2.0"
+PKG_TAR="opencv-3.2.0.zip"
+DOWNLOAD_LINK="https://netix.dl.sourceforge.net/project/opencvlibrary/opencv-unix/3.2.0/opencv-3.2.0.zip"
+
+if [ -z  $INSTALL_PREFIX ]; then
+  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
+  exit
+fi
+
+cd build
+if [ ! -d $PKG_DIR ]; then
+  if [ ! -f $PKG_TAR ]; then
+    wget $DOWNLOAD_LINK
+  fi
+  unzip $PKG_TAR
+fi
+cd $PKG_DIR
+
 mkdir -p build
-mkdir -p arm-linux/bin
-mkdir -p arm-linux/lib
-mkdir -p arm-linux/include
 cd build
-wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip
-unzip opencv-2.4.9.zip
-rm opencv-2.4.9.zip
-cd opencv-2.4.9
-cd platforms/linux/
-rm arm-gnueabi.toolchain.cmake
-wget https://raw.githubusercontent.com/alalek/opencv/fddc9c583998ac4a0c4981f2bcc34cd7be0b9911/platforms/linux/gnu.toolchain.cmake
-wget https://raw.githubusercontent.com/alalek/opencv/fddc9c583998ac4a0c4981f2bcc34cd7be0b9911/platforms/linux/arm-gnueabi.toolchain.cmake
-wget https://raw.githubusercontent.com/alalek/opencv/fddc9c583998ac4a0c4981f2bcc34cd7be0b9911/platforms/linux/arm.toolchain.cmake
-cd ../../
-mkdir build
-cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/arm-gnueabi.toolchain.cmake -DCMAKE_INSTALL_PREFIX=${DIR}/arm-linux ..
-make
+cmake -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_MAKE_PROGRAM=make ..
+make -j$(nproc)
 make install
+
 cd ${DIR}
