@@ -61,7 +61,7 @@ export INSTALL_PREFIX="/desired/install/directory"
 
 # TODO
 
-1. `catkin_make` can't find `pthread` - [My question on answers.ros](https://answers.ros.org/question/358263/cross-compiled-ros-cant-find-pthread/)
+1. Needed replacing `/usr/aarch64-linux-gnu/lib/` with `/usr/lib/aarch64-linux-gnu` on my target. Can it be avoided?
 2. Crosscompile **log4cxx** - [ROS nao guide which didn't work](http://wiki.ros.org/nao/Installation/Cross-Compiling_Catkin
 )
 3. Crosscompile **gpgme** and **gpg-error** - [Similar problem on gnupg mailing list](https://lists.gnupg.org/pipermail/gnupg-users/2012-June/044884.html)

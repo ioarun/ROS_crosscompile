@@ -33,4 +33,10 @@ fi
 
 catkin build
 
+# These were needed on jetson nano. Use with caution
 echo 'export LD_LIBRARY_PATH='"${INSTALL_PREFIX}"'/lib:$LD_LIBRARY_PATH' >> ${ROS_DIR}/install/setup.bash
+
+# Replace `/usr/aarch64-linux-gnu/lib/` with `/usr/lib/aarch64-linux-gnu/` (needed on jetson nano)
+# find $INSTALL_PREFIX -type f -exec sed -i 's|/usr/aarch64-linux-gnu/lib/|/usr/lib/aarch64-linux-gnu/|g' {} \;
+# Renaming original files with added extention `.libswp` just to be safe
+find $INSTALL_PREFIX -type f -exec sed -i.libswp 's|/usr/aarch64-linux-gnu/lib/|/usr/lib/aarch64-linux-gnu/|g' {} \;
