@@ -13,7 +13,7 @@ fi
 
 cd build
 if [ ! -d $PKG_DIR ]; then
-  git clone	$PKG_GIT
+  git clone	--branch 8.0.0 $PKG_GIT
 fi
 cd $PKG_DIR
 
