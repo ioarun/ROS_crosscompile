@@ -1,0 +1,22 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "melodic_aarch64" ]
+  pull_request:
+    branches: [ "melodic_aarch64" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: install_dependencies
+      run: ./scripts/install_dependencies.sh
+    - name: build_dependencies
+      run: INSTALL_PREFIX="install" ./scripts/build_dependencies.sh
+    - name: xcompile
+      run: INSTALL_PREFIX="install" ./scripts/xcompile.sh
+
