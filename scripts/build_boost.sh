@@ -5,7 +5,7 @@ echo "Installing boost 1.65.1"
 DIR=`pwd`
 PKG_DIR="boost_1_65_1"
 PKG_TAR="boost_1_65_1.tar.gz"
-DOWNLOAD_LINK="https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz"
+DOWNLOAD_LINK="https://boostorg.jfrog.io/artifactory/main/release/1.65.1/source/boost_1_65_1.tar.gz"
 
 if [ -z  $INSTALL_PREFIX ]; then
   echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"

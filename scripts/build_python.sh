@@ -32,9 +32,11 @@ mv python hostpython
 mv Parser/pgen Parser/hostpgen
 make distclean
 
+export PY_FORMAT_LONG_LONG=1
+
 patch -p1 < Python-2.7.3-xcompile.patch
 
-CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=${INSTALL_PREFIX} --enable-shared
+CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --host=aarch64-linux-gnu --build=x86_64-linux-gnu --prefix=${INSTALL_PREFIX} --enable-shared 
 make -j$(nproc) HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="aarch64-linux-gnu-gcc -shared" CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_TARGET=yes HOSTARCH=aarch64-linux-gnu BUILDARCH=x86_64-linux-gnu
 make install HOSTPYTHON=./hostpython BLDSHARED="aarch64-linux-gnu-gcc -shared" CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_TARGET=yes prefix=${INSTALL_PREFIX}
 cd ${DIR}
