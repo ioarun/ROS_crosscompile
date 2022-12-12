@@ -3,22 +3,13 @@
 echo "-------------------------------------------------------------------------"
 echo "Installing opencv 3.2"
 DIR=`pwd`
-PKG_DIR="opencv-3.2.0"
-PKG_TAR="opencv-3.2.0.zip"
-DOWNLOAD_LINK="https://netix.dl.sourceforge.net/project/opencvlibrary/opencv-unix/3.2.0/opencv-3.2.0.zip"
+PKG_DIR="opencv"
 
-if [ -z  $INSTALL_PREFIX ]; then
-  echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
-  exit
-fi
 
 cd build
-if [ ! -d $PKG_DIR ]; then
-  if [ ! -f $PKG_TAR ]; then
-    wget $DOWNLOAD_LINK
-  fi
-  unzip $PKG_TAR
-fi
+
+git clone --branch 3.4.18 https://github.com/opencv/opencv.git
+
 cd $PKG_DIR
 
 mkdir -p build
