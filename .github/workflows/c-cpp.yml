@@ -16,7 +16,7 @@ jobs:
     - name: install_dependencies
       run: ./scripts/install_dependencies.sh
     - name: build_dependencies
-      run: INSTALL_PREFIX="install" ./scripts/build_dependencies.sh
+      run: INSTALL_PREFIX="/install" ./scripts/build_dependencies.sh
     - name: xcompile
-      run: INSTALL_PREFIX="install" ./scripts/xcompile.sh
+      run: INSTALL_PREFIX="/install" ./scripts/xcompile.sh
 
