@@ -29,6 +29,8 @@ if [ $DIR_NAME == ROS_crosscompile ] ; then
   ./scripts/build_log4cxx.sh
   ./scripts/build_gpgrt.sh
   ./scripts/build_gpgme.sh
+  ./scripts/build_glog.sh
+  ./scripts/build_ceres.sh
 else
   echo "Run the command from 'ROS_crosscompile' directory"
   echo "Finished with error."

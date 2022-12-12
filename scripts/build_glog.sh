@@ -1,14 +1,14 @@
 #!/bin/bash -e
 
 echo "-------------------------------------------------------------------------"
-echo "Installing opencv 3.2"
+echo "Installing glog v0.5.0 "
 DIR=`pwd`
-PKG_DIR="opencv"
+PKG_DIR="glog"
 
 
 cd build
 
-git clone --branch 3.4.18 https://github.com/opencv/opencv.git
+git clone --branch v0.5.0 https://github.com/google/glog.git
 
 cd $PKG_DIR
 

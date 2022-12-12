@@ -1,14 +1,14 @@
 #!/bin/bash -e
 
 echo "-------------------------------------------------------------------------"
-echo "Installing opencv 3.2"
+echo "Installing ceres 2.0.0"
 DIR=`pwd`
-PKG_DIR="opencv"
+PKG_DIR="ceres-solver"
 
 
 cd build
 
-git clone --branch 3.4.18 https://github.com/opencv/opencv.git
+git clone --branch 2.0.0 https://github.com/ceres-solver/ceres-solver.git
 
 cd $PKG_DIR
 
