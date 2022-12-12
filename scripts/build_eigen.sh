@@ -3,9 +3,9 @@
 echo "-------------------------------------------------------------------------"
 echo "Installing eigen 3.3.4"
 DIR=`pwd`
-PKG_DIR="eigen-eigen-5a0156e40feb"
-PKG_TAR="3.3.4.tar.bz2"
-DOWNLOAD_LINK="http://bitbucket.org/eigen/eigen/get/3.3.4.tar.bz2"
+PKG_DIR="eigen-3.3.4"
+PKG_TAR="eigen-3.3.4.tar.gz"
+DOWNLOAD_LINK="https://gitlab.com/libeigen/eigen/-/archive/3.3.4/eigen-3.3.4.tar.gz"
 
 if [ -z  $INSTALL_PREFIX ]; then
   echo "Tell me where to install this. 'export INSTALL_PREFIX=your/path/'"
